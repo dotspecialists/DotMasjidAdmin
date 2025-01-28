@@ -1,5 +1,7 @@
 "use client";
 
+import { deleteMasjid } from "@/api";
+import { deletePrayers } from "@/api/HttpServices";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
@@ -9,7 +11,10 @@ import { useState } from "react";
 // import TeacherForm from "./forms/TeacherForm";
 // import StudentForm from "./forms/StudentForm";
 
-const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
+const MasjidForm = dynamic(() => import("./forms/MasjidForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const PrayerForm = dynamic(() => import("./forms/PrayerForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 const StudentForm = dynamic(() => import("./forms/StudentForm"), {
@@ -17,10 +22,19 @@ const StudentForm = dynamic(() => import("./forms/StudentForm"), {
 });
 
 const forms: {
-  [key: string]: (type: "create" | "update", data?: any) => JSX.Element;
+  [key: string]: (
+    type: "create" | "update",
+    data?: any,
+    onClose?: VoidFunction
+  ) => JSX.Element;
 } = {
-  teacher: (type, data) => <TeacherForm type={type} data={data} />,
-  student: (type, data) => <StudentForm type={type} data={data} />
+  masjid: (type, data, onClose) => (
+    <MasjidForm type={type} data={data} onClose={onClose} />
+  ),
+  prayer: (type, data, onClose) => (
+    <PrayerForm type={type} data={data} onClose={onClose} />
+  ),
+  student: (type, data) => <StudentForm type={type} data={data} />,
 };
 
 const FormModal = ({
@@ -28,9 +42,11 @@ const FormModal = ({
   type,
   data,
   id,
+  onFinish,
 }: {
   table:
-    | "teacher"
+    | "masjid"
+    | "prayer"
     | "student"
     | "parent"
     | "subject"
@@ -45,6 +61,7 @@ const FormModal = ({
   type: "create" | "update" | "delete";
   data?: any;
   id?: number;
+  onFinish?: VoidFunction;
 }) => {
   const size = type === "create" ? "w-8 h-8" : "w-7 h-7";
   const bgColor =
@@ -55,10 +72,41 @@ const FormModal = ({
       : "bg-lamaPurple";
 
   const [open, setOpen] = useState(false);
+  const onDelete = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (table === "masjid") {
+      deleteMasjid(id)
+        .then((res) => {
+          console.log("🚀 ~ deleteMasjid ~ res:", res);
+          setOpen(false);
+          onFinish?.();
+          if (!res.success) {
+            alert(res.message);
+          }
+        })
+        .catch((err) => {
+          console.log("🚀 ~ deleteMasjid ~ err:", err);
+        });
+    } else if (table === "prayer") {
+      deletePrayers(id)
+        .then((res) => {
+          console.log("🚀 ~ deletePrayers ~ res:", res);
+          setOpen(false);
+          onFinish?.();
+        })
+        .catch((err) => {
+          console.log("🚀 ~ deletePrayers ~ err:", err);
+        });
+    }
+  };
 
   const Form = () => {
     return type === "delete" && id ? (
-      <form action="" className="p-4 flex flex-col gap-4">
+      <form
+        action=""
+        className="p-4 flex flex-col gap-4"
+        onSubmit={(e) => onDelete(e)}
+      >
         <span className="text-center font-medium">
           All data will be lost. Are you sure you want to delete this {table}?
         </span>
@@ -67,7 +115,10 @@ const FormModal = ({
         </button>
       </form>
     ) : type === "create" || type === "update" ? (
-      forms[table](type, data)
+      forms[table](type, data, () => {
+        setOpen(false);
+        onFinish?.();
+      })
     ) : (
       "Form not found!"
     );
