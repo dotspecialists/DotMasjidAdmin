@@ -14,6 +14,7 @@
     "@types/react-big-calendar": "^1.8.9",
     "antd": "^5.23.2",
     "axios": "^1.7.9",
+    "cookies-next": "^5.1.0",
     "dayjs": "^1.11.13",
     "moment": "^2.30.1",
     "next": "14.2.5",

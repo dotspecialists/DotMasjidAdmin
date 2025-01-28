@@ -24,7 +24,7 @@ jwtAxios.interceptors.response.use(
   (response) => {
     console.log("🚀 ~ response:", response, response?.response?.data);
     if (response?.response?.data?.success === false) {
-      alert(response.response.data?.message);
+      // alert(response.response.data?.message);
       return Promise.reject(response.response);
     } else if (
       response?.message?.includes("Request failed") ||

@@ -25,6 +25,7 @@ const storage =
 
 const rootReducer = combineReducers({
   masjid: reducers.MasjidReducer,
+  auht: reducers.AuthReducer,
 });
 
 const persistedReducer = persistReducer(

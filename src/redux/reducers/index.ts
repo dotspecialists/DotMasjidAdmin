@@ -1,2 +1,3 @@
 import MasjidReducer from "./masjid";
-export { MasjidReducer };
+import AuthReducer from "./auth";
+export { MasjidReducer, AuthReducer };

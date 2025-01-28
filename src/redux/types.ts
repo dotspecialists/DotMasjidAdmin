@@ -6,6 +6,7 @@ export interface IStore {
   getState: () => IReduxState;
 }
 export type IReduxMasjidState = "data";
+export type IReduxAuthState = "token" | "user";
 
 export type IReduxAction<T> = {
   type: string;
@@ -15,7 +16,8 @@ export type IReduxAction<T> = {
   };
 };
 
-export type IReduxState = Record<IReduxMasjidState, any>;
+export type IReduxState = Record<IReduxMasjidState | IReduxAuthState, any>;
 export interface IReduxSlice {
   masjid: Record<IReduxMasjidState, any>;
+  auth: Record<IReduxAuthState, any>;
 }

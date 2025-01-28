@@ -1,6 +1,9 @@
+"use client";
 import { role } from "@/lib/data";
+import { removeToken } from "@/utils/helper";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const menuItems = [
   {
@@ -24,18 +27,24 @@ const menuItems = [
         href: "/list/prayers",
         visible: ["admin", "teacher", "student", "parent"],
       },
-      // {
-      //   icon: "/student.png",
-      //   label: "Students",
-      //   href: "/list/students",
-      //   visible: ["admin", "teacher"],
-      // },
-      // {
-      //   icon: "/parent.png",
-      //   label: "Parents",
-      //   href: "/list/parents",
-      //   visible: ["admin", "teacher"],
-      // },
+      {
+        icon: "/student.png",
+        label: "News",
+        href: "/list/news",
+        visible: ["admin", "teacher"],
+      },
+      {
+        icon: "/calendar.png",
+        label: "Events",
+        href: "/list/events",
+        visible: ["admin", "teacher", "student", "parent"],
+      },
+      {
+        icon: "/parent.png",
+        label: "Programs",
+        href: "/list/programs",
+        visible: ["admin", "teacher"],
+      },
       // {
       //   icon: "/subject.png",
       //   label: "Subjects",
@@ -79,12 +88,6 @@ const menuItems = [
       //   visible: ["admin", "teacher", "student", "parent"],
       // },
       // {
-      //   icon: "/calendar.png",
-      //   label: "Events",
-      //   href: "/list/events",
-      //   visible: ["admin", "teacher", "student", "parent"],
-      // },
-      // {
       //   icon: "/message.png",
       //   label: "Messages",
       //   href: "/list/messages",
@@ -118,6 +121,14 @@ const menuItems = [
 ];
 
 const Menu = () => {
+  const router = useRouter();
+  const handleLogout = () => {
+    // Remove token (clear cookie)
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC"; // Expiring the cookie
+
+    // Redirect to login page after logout
+    router.push("/login");
+  };
   return (
     <div className="mt-4 text-sm">
       {menuItems.map((i) => (
@@ -127,16 +138,41 @@ const Menu = () => {
           </span>
           {i.items.map((item) => {
             if (item.visible.includes(role)) {
-              return (
-                <Link
-                  href={item.href}
-                  key={item.label}
-                  className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
-                >
-                  <Image src={item.icon} alt="" width={20} height={20} />
-                  <span className="hidden lg:block">{item.label}</span>
-                </Link>
-              );
+              if (item.label === "Logout") {
+                return (
+                  <button
+                    onClick={() => {
+                      if (item.label === "Logout") {
+                        // removeToken();
+                        handleLogout();
+                        // router.push("/login");
+                        // window.location.href = "/login";
+                      }
+                    }}
+                    key={item.label}
+                    className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
+                  >
+                    <Image src={item.icon} alt="" width={20} height={20} />
+                    <span className="hidden lg:block">{item.label}</span>
+                  </button>
+                );
+              } else {
+                return (
+                  <Link
+                    href={item.href}
+                    onClick={() => {
+                      if (item.label === "Logout") {
+                        removeToken();
+                      }
+                    }}
+                    key={item.label}
+                    className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
+                  >
+                    <Image src={item.icon} alt="" width={20} height={20} />
+                    <span className="hidden lg:block">{item.label}</span>
+                  </Link>
+                );
+              }
             }
           })}
         </div>

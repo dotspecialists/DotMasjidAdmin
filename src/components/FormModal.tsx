@@ -1,7 +1,7 @@
 "use client";
 
-import { deleteMasjid } from "@/api";
-import { deletePrayers } from "@/api/HttpServices";
+import { deleteMasjid, deleteProgram } from "@/api";
+import { deleteEvent, deleteNews, deletePrayers } from "@/api";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
@@ -15,6 +15,15 @@ const MasjidForm = dynamic(() => import("./forms/MasjidForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 const PrayerForm = dynamic(() => import("./forms/PrayerForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const NewsForm = dynamic(() => import("./forms/NewsForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const EventForm = dynamic(() => import("./forms/EventForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const ProgramForm = dynamic(() => import("./forms/ProgramForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 const StudentForm = dynamic(() => import("./forms/StudentForm"), {
@@ -34,6 +43,15 @@ const forms: {
   prayer: (type, data, onClose) => (
     <PrayerForm type={type} data={data} onClose={onClose} />
   ),
+  news: (type, data, onClose) => (
+    <NewsForm type={type} data={data} onClose={onClose} />
+  ),
+  event: (type, data, onClose) => (
+    <EventForm type={type} data={data} onClose={onClose} />
+  ),
+  program: (type, data, onClose) => (
+    <ProgramForm type={type} data={data} onClose={onClose} />
+  ),
   student: (type, data) => <StudentForm type={type} data={data} />,
 };
 
@@ -47,6 +65,9 @@ const FormModal = ({
   table:
     | "masjid"
     | "prayer"
+    | "news"
+    | "event"
+    | "program"
     | "student"
     | "parent"
     | "subject"
@@ -56,7 +77,6 @@ const FormModal = ({
     | "assignment"
     | "result"
     | "attendance"
-    | "event"
     | "announcement";
   type: "create" | "update" | "delete";
   data?: any;
@@ -96,6 +116,36 @@ const FormModal = ({
         })
         .catch((err) => {
           console.log("🚀 ~ deletePrayers ~ err:", err);
+        });
+    } else if (table === "news") {
+      deleteNews(id)
+        .then((res) => {
+          console.log("🚀 ~ deleteNews ~ res:", res);
+          setOpen(false);
+          onFinish?.();
+        })
+        .catch((err) => {
+          console.log("🚀 ~ deleteNews ~ err:", err);
+        });
+    } else if (table === "event") {
+      deleteEvent(id)
+        .then((res) => {
+          console.log("🚀 ~ deleteEvent ~ res:", res);
+          setOpen(false);
+          onFinish?.();
+        })
+        .catch((err) => {
+          console.log("🚀 ~ deleteEvent ~ err:", err);
+        });
+    } else if (table === "program") {
+      deleteProgram(id)
+        .then((res) => {
+          console.log("🚀 ~ deleteProgram ~ res:", res);
+          setOpen(false);
+          onFinish?.();
+        })
+        .catch((err) => {
+          console.log("🚀 ~ deleteProgram ~ err:", err);
         });
     }
   };

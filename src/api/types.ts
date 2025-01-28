@@ -1,3 +1,4 @@
+import { WeekDaysProps } from "@/utils/types";
 import { AxiosRequestConfig, CancelTokenSource } from "axios";
 
 // Define supported HTTP methods
@@ -35,3 +36,28 @@ export type PrayersParams = {
   maghrib: string;
   isha: string;
 };
+export type NewsParams = {
+  masjidId: number | string;
+  date: string;
+  newsTitle: string;
+  newsDescription: string;
+  newsLink: string;
+};
+export type EventParams = {
+  photo?: string | File | null;
+  masjidId: number | string;
+  eventDate: string;
+  eventLocation: string;
+  eventDescription: string;
+  eventCost: number;
+  registerationLink?: string;
+};
+export interface ProgramParams extends WeekDaysProps {
+  photo?: string | File | null;
+  masjidId: string | number;
+  name: string;
+  description: string;
+  linkUrl: string;
+  startDate: string;
+  endDate: string;
+}

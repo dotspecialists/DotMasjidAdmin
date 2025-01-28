@@ -1,7 +1,11 @@
-const Homepage = () => {
-  return (
-    <div className=''>Homepage</div>
-  )
-}
+"use client";
+import { useEffect } from "react";
 
-export default Homepage
+const Homepage = () => {
+  useEffect(() => {
+    window.location.href = "/login";
+  }, []);
+  return <div className=""></div>;
+};
+
+export default Homepage;

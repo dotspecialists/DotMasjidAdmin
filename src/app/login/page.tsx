@@ -1,11 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { setToken } from "@/utils/helper";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    // Check if the token exists in the cookies
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="));
+
+    if (token) {
+      // If the token exists, redirect to the admin dashboard
+      router.push("/admin");
+    }
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +36,15 @@ export default function LoginPage() {
       // Simulate login API call
       console.log("Email:", email);
       console.log("Password:", password);
-      alert("Login successful!");
+      if (email === "admin@gmail.com" && password === "admin123") {
+        document.cookie = `token=token; path=/; max-age=${60 * 60 * 24}`; // token expires in 1 days
+        // Redirect to /dashboard/admin after setting the token
+        router.push("/admin");
+        // alert("Login successful!");
+      } else {
+        alert("Invalid credentials!");
+      }
+      // setToken("token");
     } catch (err) {
       setError("Invalid email or password.");
     }
@@ -31,7 +54,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
         <h1 className="text-2xl font-semibold text-center text-gray-800">
-          Login
+          Dot Masjid
         </h1>
         {error && (
           <div className="p-3 mt-4 text-sm text-red-700 bg-red-100 rounded">
@@ -44,7 +67,7 @@ export default function LoginPage() {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Email
+              username
             </label>
             <input
               id="email"

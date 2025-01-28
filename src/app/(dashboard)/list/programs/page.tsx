@@ -1,23 +1,25 @@
 "use client";
-import { listEvents } from "@/api";
+import { listEvents, listPrograms } from "@/api";
 import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { eventsData, role } from "@/lib/data";
 import { IMAGE_URL } from "@/utils/constants";
+import { WeekDaysProps } from "@/utils/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-type Event = {
+type Program = {
   id: number;
   photo?: string;
   masjid: { id: number; name: string };
-  eventDate: string;
-  eventLocation: string;
-  eventDescription: string;
-  eventCost: number;
-  registerationLink?: string;
+  name: string;
+  description: string;
+  linkUrl: string;
+  startDate: string;
+  endDate: string;
+  schedule: WeekDaysProps;
 };
 
 const columns = [
@@ -31,20 +33,20 @@ const columns = [
     className: "hidden md:table-cell",
   },
   {
-    header: "Location",
-    accessor: "location",
+    header: "Start Date",
+    accessor: "start date",
   },
   {
-    header: "Date",
-    accessor: "date",
+    header: "End Date",
+    accessor: "end date",
   },
   {
-    header: "Cost",
-    accessor: "cost",
+    header: "Schedule",
+    accessor: "schedule",
     className: "hidden md:table-cell",
   },
   {
-    header: "Registration",
+    header: "Link",
     accessor: "registration",
     className: "hidden md:table-cell",
   },
@@ -54,10 +56,10 @@ const columns = [
   },
 ];
 
-const EventListPage = () => {
+const ProgramListPage = () => {
   const [refresh, setRefresh] = useState<boolean>(true);
-  const [events, setEvents] = useState<any>([]);
-  const renderRow = (item: Event) => (
+  const [programs, setPrograms] = useState<any>([]);
+  const renderRow = (item: Program) => (
     <tr
       key={item?.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
@@ -71,23 +73,32 @@ const EventListPage = () => {
           className="md:hidden xl:block w-10 h-10 rounded-full object-cover"
         />
         <div className="flex flex-col">
-          <h3 className="font-semibold">{item.masjid?.name}</h3>
+          <h3 className="font-semibold">{item?.name}</h3>
           {/* <p className="text-xs text-gray-500">{item?.timezone}</p> */}
         </div>
       </td>
-      <td>{item?.eventDescription?.substring(0, 15) + "..."}</td>
-      <td>{item?.eventLocation}</td>
-      <td className="hidden md:table-cell">{item?.eventDate}</td>
-      <td className="hidden md:table-cell">${item?.eventCost}</td>
+      <td>{item?.description?.substring(0, 15) + "..."}</td>
+      <td>{item?.startDate}</td>
+      <td>{item?.endDate}</td>
+      <td>
+        {Object.entries(item?.schedule)
+          ?.map(([key, value]: any) => {
+            if (value) {
+              return key?.substring(0, 3);
+            }
+          })
+          ?.filter((item) => item && item)
+          ?.join(", ")}
+      </td>
       {/* <td className="hidden md:table-cell">{item.registerationLink}</td> */}
       <td className="hidden md:table-cell">
         <a
-          href={item?.registerationLink}
+          href={item?.linkUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block px-4 py-2 bg-blue-600 text-white font-semibold text-sm rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300"
         >
-          Book Now
+          Open
         </a>
       </td>
       <td>
@@ -95,13 +106,13 @@ const EventListPage = () => {
           {role === "admin" && (
             <>
               <FormModal
-                table="event"
+                table="program"
                 type="update"
                 data={item}
                 onFinish={() => setRefresh(true)}
               />
               <FormModal
-                table="event"
+                table="program"
                 type="delete"
                 id={item.id}
                 onFinish={() => setRefresh(true)}
@@ -114,10 +125,10 @@ const EventListPage = () => {
   );
   useEffect(() => {
     refresh &&
-      listEvents({ page: 1, count: 10 })
+      listPrograms({ page: 1, count: 10 })
         .then((res) => {
           console.log("🚀 ~ listEvents ~ res:", res?.data);
-          setEvents(res?.data?.events);
+          setPrograms(res?.data?.programs);
         })
         .catch((err) => {
           console.log("🚀 ~ listEvents ~ err:", err);
@@ -131,7 +142,7 @@ const EventListPage = () => {
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP */}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Events</h1>
+        <h1 className="hidden md:block text-lg font-semibold">All Programs</h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
@@ -143,7 +154,7 @@ const EventListPage = () => {
             </button>
             {role === "admin" && (
               <FormModal
-                table="event"
+                table="program"
                 type="create"
                 onFinish={() => setRefresh(true)}
               />
@@ -152,11 +163,11 @@ const EventListPage = () => {
         </div>
       </div>
       {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={events || []} />
+      <Table columns={columns} renderRow={renderRow} data={programs || []} />
       {/* PAGINATION */}
       <Pagination />
     </div>
   );
 };
 
-export default EventListPage;
+export default ProgramListPage;
