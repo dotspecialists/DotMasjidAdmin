@@ -22,8 +22,9 @@ export const setMasjid = (cred: FormData) => {
 };
 export const listMasjids = (cred: ListParams) => {
   return request({
-    url: `masjid/list?page=${cred.page}&count=${cred.count}`,
+    url: `masjid/list`,
     method: "GET",
+    data: cred,
   });
 };
 export const editMasjid = (
@@ -63,8 +64,9 @@ export const setPrayers = (cred: PrayersParams) => {
 };
 export const listPrayers = (cred: ListParams) => {
   return request({
-    url: `prayers/list?page=${cred.page}&count=${cred.count}`,
+    url: `prayers/list`,
     method: "GET",
+    data: cred,
   });
 };
 export const editPrayers = (cred: PrayersParams) => {
@@ -89,8 +91,9 @@ export const setNews = (cred: NewsParams) => {
 };
 export const listNews = (cred: ListParams) => {
   return request({
-    url: `news/list?page=${cred.page}&count=${cred.count}`,
+    url: `news/list`,
     method: "GET",
+    data: cred,
   });
 };
 export const editNews = (cred: NewsParams) => {
@@ -120,8 +123,9 @@ export const setEvent = (cred: FormData) => {
 };
 export const listEvents = (cred: ListParams) => {
   return request({
-    url: `event/list?page=${cred.page}&count=${cred.count}`,
+    url: `event/list`,
     method: "GET",
+    data: cred,
   });
 };
 export const editEvent = (
@@ -166,8 +170,9 @@ export const setProgram = (cred: FormData) => {
 };
 export const listPrograms = (cred: ListParams) => {
   return request({
-    url: `program/list?page=${cred.page}&count=${cred.count}`,
+    url: `program/list`,
     method: "GET",
+    data: cred,
   });
 };
 export const editProgram = (

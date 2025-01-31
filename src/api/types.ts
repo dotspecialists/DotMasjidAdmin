@@ -25,6 +25,8 @@ export type MasjidParams = {
 export type ListParams = {
   page: number;
   count: number;
+  q?: string;
+  fields?: string;
 };
 
 export type PrayersParams = {

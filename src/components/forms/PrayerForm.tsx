@@ -19,12 +19,27 @@ const schema = z.object({
   masjidId: z.string().min(1, { message: "Masjid id is required" }),
   date: z.string().length(10, { message: "Invalid Time, use format HH:mm:ss" }),
   fajr: z.string().length(8, { message: "Invalid Time, use format HH:mm:ss" }),
+  fajrIqamat: z
+    .string()
+    .length(8, { message: "Invalid Time, use format HH:mm:ss" }),
   zuhr: z.string().length(8, { message: "Invalid Time, use format HH:mm:ss" }),
+  zuhrIqamat: z
+    .string()
+    .length(8, { message: "Invalid Time, use format HH:mm:ss" }),
   asr: z.string().length(8, { message: "Invalid Time, use format HH:mm:ss" }),
+  asrIqamat: z
+    .string()
+    .length(8, { message: "Invalid Time, use format HH:mm:ss" }),
   maghrib: z
     .string()
     .length(8, { message: "Invalid Time, use format HH:mm:ss" }),
+  maghribIqamat: z
+    .string()
+    .length(8, { message: "Invalid Time, use format HH:mm:ss" }),
   isha: z.string().length(8, { message: "Invalid Time, use format HH:mm:ss" }),
+  ishaIqamat: z
+    .string()
+    .length(8, { message: "Invalid Time, use format HH:mm:ss" }),
 });
 
 type Inputs = z.infer<typeof schema>;
@@ -58,6 +73,11 @@ const PrayerForm = ({
       setValue("asr", data?.asr);
       setValue("maghrib", data?.maghrib);
       setValue("isha", data?.isha);
+      setValue("fajrIqamat", data?.fajrIqamat);
+      setValue("zuhrIqamat", data?.zuhrIqamat);
+      setValue("asrIqamat", data?.asrIqamat);
+      setValue("maghribIqamat", data?.maghribIqamat);
+      setValue("ishaIqamat", data?.ishaIqamat);
     }
   }, []);
 
@@ -127,6 +147,18 @@ const PrayerForm = ({
           error={errors.fajr}
         />
         <TimePicker
+          label="Fajr Iqammah"
+          onChange={(time, timeString) => {
+            console.log("🚀 ~ timeString:", timeString);
+            //@ts-ignore
+            setValue("fajrIqamat", timeString);
+          }}
+          placeholder="Fajr Iqammah time"
+          defaultValue={data?.fajrIqamat && dayjs(data?.fajrIqamat, "HH:mm:ss")}
+          // defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")}
+          error={errors.fajrIqamat}
+        />
+        <TimePicker
           label="Zuhr"
           onChange={(time, timeString) => {
             //@ts-ignore
@@ -135,6 +167,16 @@ const PrayerForm = ({
           placeholder="Zuhr time"
           defaultValue={data?.zuhr && dayjs(data?.zuhr, "HH:mm:ss")}
           error={errors.zuhr}
+        />
+        <TimePicker
+          label="Zuhr Iqammah"
+          onChange={(time, timeString) => {
+            //@ts-ignore
+            setValue("zuhrIqamat", timeString);
+          }}
+          placeholder="Zuhr Iqammah time"
+          defaultValue={data?.zuhrIqamat && dayjs(data?.zuhrIqamat, "HH:mm:ss")}
+          error={errors.zuhrIqamat}
         />
         <TimePicker
           label="Asr"
@@ -147,6 +189,16 @@ const PrayerForm = ({
           error={errors.asr}
         />
         <TimePicker
+          label="Asr Iqammah"
+          onChange={(time, timeString) => {
+            //@ts-ignore
+            setValue("asrIqamat", timeString);
+          }}
+          placeholder="Asr Iqammah time"
+          defaultValue={data?.asrIqamat && dayjs(data?.asrIqamat, "HH:mm:ss")}
+          error={errors.asrIqamat}
+        />
+        <TimePicker
           label="Maghrib"
           onChange={(time, timeString) => {
             //@ts-ignore
@@ -157,6 +209,18 @@ const PrayerForm = ({
           error={errors.maghrib}
         />
         <TimePicker
+          label="Maghrib Iqammah"
+          onChange={(time, timeString) => {
+            //@ts-ignore
+            setValue("maghribIqamat", timeString);
+          }}
+          placeholder="Maghrib Iqammah time"
+          defaultValue={
+            data?.maghribIqamat && dayjs(data?.maghribIqamat, "HH:mm:ss")
+          }
+          error={errors.maghribIqamat}
+        />
+        <TimePicker
           label="Isha"
           onChange={(time, timeString) => {
             //@ts-ignore
@@ -165,6 +229,16 @@ const PrayerForm = ({
           placeholder="Isha time"
           defaultValue={data?.isha && dayjs(data?.isha, "HH:mm:ss")}
           error={errors.isha}
+        />
+        <TimePicker
+          label="Isha Iqammah"
+          onChange={(time, timeString) => {
+            //@ts-ignore
+            setValue("ishaIqamat", timeString);
+          }}
+          placeholder="Isha Iqammah time"
+          defaultValue={data?.ishaIqamat && dayjs(data?.ishaIqamat, "HH:mm:ss")}
+          error={errors.ishaIqamat}
         />
       </div>
       <button className="bg-blue-400 text-white p-2 rounded-md">

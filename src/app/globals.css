@@ -106,3 +106,7 @@
   color: gray !important;
   margin-bottom: 5px;
 }
+#rpb-pagination{
+  display: flex !important;
+  flex-direction: row !important;
+}

@@ -1,5 +1,5 @@
 {
-  "name": "lama-dev-next-dashboard",
+  "name": "dot-masjid-dashboard",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,6 +23,7 @@
     "react-calendar": "^5.0.0",
     "react-dom": "^18",
     "react-hook-form": "^7.52.2",
+    "react-pagination-bar": "^2.0.1",
     "react-redux": "^9.2.0",
     "recharts": "^2.12.7",
     "redux": "^5.0.1",
