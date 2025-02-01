@@ -38,6 +38,10 @@ export type PrayersParams = {
   maghrib: string;
   isha: string;
 };
+export type PrayersByCSVParams = {
+  masjidId: string | number;
+  csv: File;
+};
 export type NewsParams = {
   masjidId: number | string;
   date: string;

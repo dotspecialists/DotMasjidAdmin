@@ -10,7 +10,7 @@ type DropdownProps = {
   label: string;
   value?: number;
   name: string;
-  defaultValue: number;
+  defaultValue?: number;
   options: ValueType[];
   error?: FieldError;
   register?: any;

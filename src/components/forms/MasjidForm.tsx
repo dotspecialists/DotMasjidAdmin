@@ -12,8 +12,8 @@ import { useEffect, useState } from "react";
 const schema = z.object({
   name: z
     .string()
-    .min(3, { message: "Username must be at least 3 characters long!" })
-    .max(20, { message: "Username must be at most 20 characters long!" }),
+    .min(3, { message: "masjid name must be at least 3 characters long!" })
+    .max(20, { message: "masjid name must be at most 20 characters long!" }),
   website: z.string(),
   city: z.string().min(1, { message: "City is required!" }),
   state: z.string().min(1, { message: "State is required!" }),

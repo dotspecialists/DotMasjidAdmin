@@ -4,6 +4,7 @@ import {
   ListParams,
   MasjidParams,
   NewsParams,
+  PrayersByCSVParams,
   PrayersParams,
   ProgramParams,
 } from "./types";
@@ -200,5 +201,23 @@ export const deleteProgram = (id?: number) => {
   return request({
     url: `program/delete/${id}`,
     method: "DELETE",
+  });
+};
+export const setPrayersByCSV = (cred: PrayersByCSVParams) => {
+  console.log("🚀 ~ setPrayersByCSV ~ cred:", cred);
+  var formData = new FormData();
+  Object.entries(cred).forEach(([key, value]: any) =>
+    formData.append(key, value)
+  );
+
+  return request({
+    url: `prayers/add/csv`,
+    method: "POST",
+    data: formData,
+    config: {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
   });
 };

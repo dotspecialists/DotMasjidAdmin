@@ -18,6 +18,7 @@ import {
   setMasjid,
   setNews,
   setPrayers,
+  setPrayersByCSV,
   setProgram,
 } from "./HttpServices";
 
@@ -42,4 +43,5 @@ export {
   listPrograms,
   editProgram,
   deleteProgram,
+  setPrayersByCSV,
 };

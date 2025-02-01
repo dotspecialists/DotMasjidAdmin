@@ -1,6 +1,7 @@
 "use client";
 import { listPrayers } from "@/api/HttpServices";
 import FormModal from "@/components/FormModal";
+import CsvForm from "@/components/forms/CsvForm";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import { role } from "@/lib/data";
@@ -9,7 +10,7 @@ import { capitalize } from "@/utils/helper";
 import { Popover, PopoverProps } from "antd";
 import moment from "moment";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Pagination } from "react-pagination-bar";
 import { useSelector } from "react-redux";
 
@@ -66,9 +67,11 @@ const PrayersListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [fields, setFields] = useState<string[]>([]);
+  const [open, setOpen] = useState<boolean>(false);
 
   const allFields = ["name", "date", "fajr", "zuhr", "maghrib", "isha"];
 
+  const fileInputRef = useRef(null);
   const renderRow = (item: PrayersTime) => (
     <tr
       key={item.id}
@@ -157,6 +160,15 @@ const PrayersListPage = () => {
       ))}
     </div>
   );
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file && file.type === "text/csv") {
+      console.log("Selected file:", file);
+      // You can now send the file to your backend or process it further
+    } else {
+      alert("Please select a valid CSV file.");
+    }
+  };
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -181,6 +193,38 @@ const PrayersListPage = () => {
                 <Image src="/filter.png" alt="" width={14} height={14} />
               </button>
             </Popover>
+            {/* <input
+              type="file"
+              accept=".csv"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleFileChange}
+            /> */}
+            <button
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow"
+              onClick={() => setOpen(true)}
+            >
+              <Image src="/csv.png" alt="" width={14} height={14} />
+            </button>
+            {open && (
+              <div className="w-screen h-screen absolute left-0 top-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
+                <div className="bg-white p-4 rounded-md relative w-[90%] md:w-[70%] lg:w-[60%] xl:w-[50%] 2xl:w-[40%]">
+                  <CsvForm
+                    onClose={() => {
+                      setOpen(false);
+                      setRefresh(true);
+                    }}
+                    type="create"
+                  />
+                  <div
+                    className="absolute top-4 right-4 cursor-pointer"
+                    onClick={() => setOpen(false)}
+                  >
+                    <Image src="/close.png" alt="" width={14} height={14} />
+                  </div>
+                </div>
+              </div>
+            )}
             {role === "admin" && (
               <FormModal
                 table="prayer"
